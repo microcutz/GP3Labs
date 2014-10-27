@@ -40,12 +40,51 @@ void cCube::prepareCube(float rAngle)
 	}
 }
 
-void cCube::initialiseCube()
+void cCube::loadTextureCoords() // Lab 3
 {
+	m_CubeTextureIndices[0] = glm::vec2(0.5f, 0.66f);
+	m_CubeTextureIndices[1] = glm::vec2(0.5f, 1.0f);
+	m_CubeTextureIndices[2] = glm::vec2(1.0f, 0.66f);
+	m_CubeTextureIndices[3] = glm::vec2(1.0f, 1.0f);
+
+	m_CubeTextureIndices[4] = glm::vec2(0.5f, 0.0f);
+	m_CubeTextureIndices[5] = glm::vec2(0.0f, 0.0f);
+	m_CubeTextureIndices[6] = glm::vec2(0.5f, 0.33f);
+	m_CubeTextureIndices[7] = glm::vec2(0.0f, 0.33f);
+
+	m_CubeTextureIndices[8] = glm::vec2(0.0f, 0.66f);
+	m_CubeTextureIndices[9] = glm::vec2(0.5f, 0.33f);
+	m_CubeTextureIndices[10] = glm::vec2(0.0f, 0.33f);
+	m_CubeTextureIndices[11] = glm::vec2(0.5f, 0.66f);
+
+	m_CubeTextureIndices[12] = glm::vec2(0.5f, 0.33f);
+	m_CubeTextureIndices[13] = glm::vec2(0.5f, 0.66f);
+	m_CubeTextureIndices[14] = glm::vec2(1.0f, 0.66f);
+	m_CubeTextureIndices[15] = glm::vec2(1.0f, 0.33f);
+
+	m_CubeTextureIndices[16] = glm::vec2(0.0f, 0.66f);
+	m_CubeTextureIndices[17] = glm::vec2(0.5f, 1.0f);
+	m_CubeTextureIndices[18] = glm::vec2(0.5f, 0.66f);
+	m_CubeTextureIndices[19] = glm::vec2(0.0f, 1.0f);
+
+	m_CubeTextureIndices[20] = glm::vec2(0.5f, 0.0f);
+	m_CubeTextureIndices[21] = glm::vec2(0.5f, 0.33f);
+	m_CubeTextureIndices[22] = glm::vec2(1.0f, 0.33f);
+	m_CubeTextureIndices[23] = glm::vec2(1.0f, 0.0f);
+}
+
+void cCube::initialiseCube(cImageLoader texture)
+{	
+
 	m_topLeftFront = glm::vec3(-1.0f, 1.0f, 1.0f);
 	m_bottomLeftFront = glm::vec3(-1.0f, -1.0f, 1.0f);
 	m_topRightFront = glm::vec3(1.0f, 1.0f, 1.0f);
-	m_bottomRightFront = glm::vec3(1.0f, -1.0f, 1.0f);	m_topLeftBack = glm::vec3(-1.0f, 1.0f, -1.0f);	m_topRightBack = glm::vec3(1.0f, 1.0f, -1.0f);	m_bottomLeftBack = glm::vec3(-1.0f, -1.0f, -1.0f);	m_bottomRightBack = glm::vec3(1.0f, -1.0f, -1.0f);
+	m_bottomRightFront = glm::vec3(1.0f, -1.0f, 1.0f);
+	m_topLeftBack = glm::vec3(-1.0f, 1.0f, -1.0f);
+	m_topRightBack = glm::vec3(1.0f, 1.0f, -1.0f);
+	m_bottomLeftBack = glm::vec3(-1.0f, -1.0f, -1.0f);
+	m_bottomRightBack = glm::vec3(1.0f, -1.0f, -1.0f);
+
 	// Push back 8 vertices that make up a cube
 	m_vertices.push_back(m_bottomLeftFront);
 	m_vertices.push_back(m_bottomLeftBack);
@@ -97,6 +136,9 @@ void cCube::initialiseCube()
 	m_cubeIndices[33] = 0;
 	m_cubeIndices[34] = 3;
 	m_cubeIndices[35] = 7;
+	
+	// Call loadTextureCoords() - Lab 3
+	loadTextureCoords();
 
 	// Create Colour list
 	cColours theColour;
@@ -108,10 +150,11 @@ void cCube::initialiseCube()
 
 	// Assign variables that will be used to store the unique objects ID's that will be used
 	// to reger to the two buffers.
-
 	glGenBuffers = (PFNGLGENBUFFERSARBPROC)wglGetProcAddress("glGenBuffers");
 	glBindBuffer = (PFNGLBINDBUFFERPROC)wglGetProcAddress("glBindBuffer");
-	glBufferData = (PFNGLBUFFERDATAPROC)wglGetProcAddress("glBufferData");
+	glBufferData = (PFNGLBUFFERDATAPROC)wglGetProcAddress("glBufferData");
+	
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -125,6 +168,26 @@ void cCube::initialiseCube()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)* 36,
 		&m_cubeIndices[0], GL_STATIC_DRAW); //Send the data to OpenGL
 	
+	// Lab3
+	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferObjects[3]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)* 2 * 24, &m_CubeTextureIndices[0], GL_STATIC_DRAW);
+
+
+	glGenBuffers(1, &m_TextureID);
+	glBindTexture(GL_TEXTURE_2D, m_TextureID);
+
+	// Store the texture data for OpenGL use - Lab 3
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, texture.getImageWidth(), texture.getImageHeight(), GL_BGRA, 0, GL_UNSIGNED_BYTE, texture.getImageData());
+
+	// Lab 3
+	// Bind the colour array, and set the colour pointer to point at it
+	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferObjects[3]);
+	glTexCoordPointer(2, GL_FLOAT, 0, 0);
+
 	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferObjects[3]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)* 3 *
 		m_colourList.size(), &m_colourList[0], GL_STATIC_DRAW); //Send the data to OpenGL
@@ -139,5 +202,7 @@ void cCube::initialiseCube()
 	
 	glTranslatef(0.0f, 0.0f, -6.0f);
 	glRotatef(30.0f, 0.0f, 1.0f, 0.0f);
+
+	
 }
 

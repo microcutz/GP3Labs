@@ -13,6 +13,7 @@ cCube.h
 #include "wglext.h"
 #include <vector>
 #include "cColours.h"
+#include "cImageLoader.h"
 
 class cCube : public windowOGL
 {
@@ -22,7 +23,8 @@ public:
 	float getRotAngle();
 	void setRotAngle(float rotAngle);
 	void prepareCube(float rAngle);
-	void initialiseCube();
+	void initialiseCube(cImageLoader texture);
+	void loadTextureCoords();  // Lab 3
 
 private:
 	float m_rotAngle;
@@ -35,12 +37,14 @@ private:
 	glm::vec3 m_bottomLeftBack;
 	glm::vec3 m_bottomRightBack;
 
-	glm::vec3 m_CubeFaces[24];
+	glm::vec2 m_CubeTextureIndices[24];
 	GLuint m_cubeIndices[36];
 
 	std::vector<glm::vec3> m_vertices;
 	std::vector<glm::vec3> m_colourList;
-	GLuint m_VertexBufferObjects[3];
+	GLuint m_VertexBufferObjects[4];
+
+	GLuint m_TextureID;
 };
 
 #endif

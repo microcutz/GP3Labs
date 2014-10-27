@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Bryan\Documents\Visual Studio 2013\Projects\Lab2\freeglut\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Bryan\Documents\Visual Studio 2013\Projects\Lab2\freeglut\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Bryan\Documents\Visual Studio 2013\Projects\Lab2\Include;C:\Users\Bryan\Documents\Visual Studio 2013\Projects\Lab2\freeglut\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Bryan\Documents\Visual Studio 2013\Projects\Lab2\Libraries;C:\Users\Bryan\Documents\Visual Studio 2013\Projects\Lab2\freeglut\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -50,7 +50,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClCompile Include="cColours.cpp" />
     <ClCompile Include="cCube.cpp" />
+    <ClCompile Include="cImageLoader.cpp" />
     <ClCompile Include="cTriangle.cpp" />
     <ClCompile Include="cWNDManager.cpp" />
     <ClCompile Include="GameConstants.cpp" />
@@ -79,14 +80,19 @@
   <ItemGroup>
     <ClInclude Include="cColours.h" />
     <ClInclude Include="cCube.h" />
+    <ClInclude Include="cImageLoader.h" />
     <ClInclude Include="cTriangle.h" />
     <ClInclude Include="cWNDManager.h" />
+    <ClInclude Include="FreeImage.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="glext.h" />
     <ClInclude Include="glm.hpp" />
     <ClInclude Include="glxext.h" />
     <ClInclude Include="wglext.h" />
     <ClInclude Include="windowOGL.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Images\diceFaces.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
